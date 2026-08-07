@@ -1,0 +1,87 @@
+name: saludya
+
+services:
+  # ---------------------------------------------------------
+  # Base de datos: PostgreSQL 15 (Fase 2)
+  # ---------------------------------------------------------
+  db:
+    image: postgres:15-alpine
+    container_name: saludya_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-saludya}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-saludya}
+      POSTGRES_DB: ${POSTGRES_DB:-saludya}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Se ejecutan una sola vez, la primera vez que se crea el volumen,
+      # en orden alfabético: schema.sql (estructura) y luego seed.sql (datos demo).
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-saludya} -d ${POSTGRES_DB:-saludya}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - saludya_net
+
+  # ---------------------------------------------------------
+  # Backend: FastAPI + Uvicorn (Fase 3)
+  # ---------------------------------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: saludya_backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-saludya}:${POSTGRES_PASSWORD:-saludya}@db:5432/${POSTGRES_DB:-saludya}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change-this-to-a-long-random-value-in-production}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      JWT_ACCESS_TOKEN_EXPIRE_MINUTES: ${JWT_ACCESS_TOKEN_EXPIRE_MINUTES:-60}
+      CORS_ORIGINS: ${CORS_ORIGINS:-["http://localhost:5173","http://localhost:8080"]}
+      APPOINTMENT_START_HOUR: ${APPOINTMENT_START_HOUR:-7}
+      APPOINTMENT_END_HOUR: ${APPOINTMENT_END_HOUR:-17}
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - saludya_net
+
+  # ---------------------------------------------------------
+  # Frontend: React + Vite, servido por Nginx (Fase 4)
+  # ---------------------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-/api/v1}
+    container_name: saludya_frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-8080}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - saludya_net
+
+volumes:
+  postgres_data:
+
+networks:
+  saludya_net:
+    driver: bridge
