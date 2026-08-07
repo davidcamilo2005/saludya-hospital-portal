@@ -112,7 +112,7 @@ export default function EspecialidadesAdminPage() {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {especialidades.map((esp) => (
-                  <tr key={esp.id}>
+                  <tr key={esp.id} className="animate-fade-in transition-colors duration-150 hover:bg-blue-50/40">
                     <td className="px-4 py-3 font-medium text-slate-900">{esp.nombre}</td>
                     <td className="px-4 py-3 text-slate-500">{esp.descripcion || "—"}</td>
                     <td className="px-4 py-3">

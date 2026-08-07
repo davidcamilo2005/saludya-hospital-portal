@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { especialidadesApi } from "../../api/endpoints";
-import { Alert, Card, EmptyState, PageLoader, SectionHeading } from "../../components/ui";
+import { Alert, Card, EmptyState, PageLoader, Reveal, SectionHeading } from "../../components/ui";
 
 export default function EspecialidadesPage() {
   const [especialidades, setEspecialidades] = useState([]);
@@ -32,13 +32,15 @@ export default function EspecialidadesPage() {
         )}
         {!cargando && !error && especialidades.length > 0 && (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {especialidades.map((esp) => (
-              <Card key={esp.id} className="p-5">
-                <h3 className="text-lg font-semibold text-slate-900">{esp.nombre}</h3>
-                <p className="mt-2 text-sm text-slate-500">
-                  {esp.descripcion || "Descripción no disponible."}
-                </p>
-              </Card>
+            {especialidades.map((esp, i) => (
+              <Reveal key={esp.id} delay={(i % 6) * 60}>
+                <Card hover className="h-full p-5">
+                  <h3 className="text-lg font-semibold text-slate-900">{esp.nombre}</h3>
+                  <p className="mt-2 text-sm text-slate-500">
+                    {esp.descripcion || "Descripción no disponible."}
+                  </p>
+                </Card>
+              </Reveal>
             ))}
           </div>
         )}

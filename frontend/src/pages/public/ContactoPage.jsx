@@ -1,4 +1,4 @@
-import { Card, SectionHeading } from "../../components/ui";
+import { Card, Reveal, SectionHeading } from "../../components/ui";
 import { CONTACTO } from "../../constants/institucional";
 
 const items = [
@@ -18,14 +18,21 @@ export default function ContactoPage() {
       />
 
       <div className="mx-auto mt-10 grid max-w-2xl gap-4 sm:grid-cols-2">
-        {items.map((item) => (
-          <Card key={item.label} className="flex items-start gap-3 p-5">
-            <span className="text-2xl" aria-hidden="true">{item.icono}</span>
-            <div>
-              <p className="text-sm font-medium text-slate-500">{item.label}</p>
-              <p className="font-semibold text-slate-900">{item.valor}</p>
-            </div>
-          </Card>
+        {items.map((item, i) => (
+          <Reveal key={item.label} delay={i * 80}>
+            <Card hover className="group flex h-full items-start gap-3 p-5">
+              <span
+                className="text-2xl transition-transform duration-300 group-hover:scale-125 group-hover:rotate-6"
+                aria-hidden="true"
+              >
+                {item.icono}
+              </span>
+              <div>
+                <p className="text-sm font-medium text-slate-500">{item.label}</p>
+                <p className="font-semibold text-slate-900">{item.valor}</p>
+              </div>
+            </Card>
+          </Reveal>
         ))}
       </div>
     </div>

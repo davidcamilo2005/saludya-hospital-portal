@@ -12,6 +12,7 @@ import {
   Modal,
   PageLoader,
 } from "../../components/ui";
+import { InitialsAvatar } from "../../components/illustrations";
 
 const FORM_INICIAL = {
   nombre: "",
@@ -146,9 +147,12 @@ export default function MedicosAdminPage() {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {medicos.map((medico) => (
-                  <tr key={medico.id}>
+                  <tr key={medico.id} className="animate-fade-in transition-colors duration-150 hover:bg-blue-50/40">
                     <td className="px-4 py-3 font-medium text-slate-900">
-                      Dr(a). {medico.nombre} {medico.apellido}
+                      <div className="flex items-center gap-3">
+                        <InitialsAvatar nombre={medico.nombre} apellido={medico.apellido} size="sm" />
+                        Dr(a). {medico.nombre} {medico.apellido}
+                      </div>
                     </td>
                     <td className="px-4 py-3 text-slate-500">{medico.documento_identidad}</td>
                     <td className="px-4 py-3">

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { pacientesApi } from "../../api/endpoints";
 import { Alert, Badge, Button, Card, EmptyState, PageLoader } from "../../components/ui";
+import { InitialsAvatar } from "../../components/illustrations";
 
 export default function PacientesAdminPage() {
   const [pacientes, setPacientes] = useState([]);
@@ -59,9 +60,12 @@ export default function PacientesAdminPage() {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {pacientes.map((paciente) => (
-                  <tr key={paciente.id}>
+                  <tr key={paciente.id} className="animate-fade-in transition-colors duration-150 hover:bg-blue-50/40">
                     <td className="px-4 py-3 font-medium text-slate-900">
-                      {paciente.usuario.nombre} {paciente.usuario.apellido}
+                      <div className="flex items-center gap-3">
+                        <InitialsAvatar nombre={paciente.usuario.nombre} apellido={paciente.usuario.apellido} size="sm" />
+                        {paciente.usuario.nombre} {paciente.usuario.apellido}
+                      </div>
                     </td>
                     <td className="px-4 py-3 text-slate-500">{paciente.usuario.email}</td>
                     <td className="px-4 py-3 text-slate-500">{paciente.documento_identidad}</td>

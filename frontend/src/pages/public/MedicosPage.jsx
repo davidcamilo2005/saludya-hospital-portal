@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { medicosApi } from "../../api/endpoints";
-import { Alert, Badge, Card, EmptyState, PageLoader, Select, SectionHeading } from "../../components/ui";
+import { Alert, Badge, Card, EmptyState, PageLoader, Reveal, Select, SectionHeading } from "../../components/ui";
+import { InitialsAvatar } from "../../components/illustrations";
 
 export default function MedicosPage() {
   const [medicos, setMedicos] = useState([]);
@@ -57,26 +58,26 @@ export default function MedicosPage() {
         )}
         {!cargando && !error && medicosFiltrados.length > 0 && (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {medicosFiltrados.map((medico) => (
-              <Card key={medico.id} className="p-5">
-                <div className="flex items-center gap-3">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-xl">
-                    🩺
-                  </span>
-                  <div>
-                    <p className="font-semibold text-slate-900">
-                      Dr(a). {medico.nombre} {medico.apellido}
-                    </p>
+            {medicosFiltrados.map((medico, i) => (
+              <Reveal key={medico.id} delay={(i % 6) * 60}>
+                <Card hover className="h-full p-5">
+                  <div className="flex items-center gap-3">
+                    <InitialsAvatar nombre={medico.nombre} apellido={medico.apellido} />
+                    <div>
+                      <p className="font-semibold text-slate-900">
+                        Dr(a). {medico.nombre} {medico.apellido}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {medico.especialidades.map((esp) => (
-                    <Badge key={esp.id} tone="blue">
-                      {esp.nombre}
-                    </Badge>
-                  ))}
-                </div>
-              </Card>
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {medico.especialidades.map((esp) => (
+                      <Badge key={esp.id} tone="blue">
+                        {esp.nombre}
+                      </Badge>
+                    ))}
+                  </div>
+                </Card>
+              </Reveal>
             ))}
           </div>
         )}

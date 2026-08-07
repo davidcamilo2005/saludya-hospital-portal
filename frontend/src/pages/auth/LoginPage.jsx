@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../context/AuthContext";
 import { Alert, Button, Card, FormField, Input } from "../../components/ui";
+import { AuthIllustration } from "../../components/illustrations";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -31,7 +32,8 @@ export default function LoginPage() {
 
   return (
     <div className="mx-auto flex max-w-md flex-col justify-center px-4 py-16">
-      <Card className="p-8">
+      <AuthIllustration className="mx-auto mb-6 h-28 w-28 animate-fade-in-up" />
+      <Card className="animate-fade-in-up p-8" style={{ animationDelay: "100ms" }}>
         <h1 className="text-2xl font-bold text-slate-900">Inicia sesión</h1>
         <p className="mt-1 text-sm text-slate-500">Accede a tu cuenta de SaludYa.</p>
 

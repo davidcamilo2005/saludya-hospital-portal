@@ -17,3 +17,58 @@ body {
   outline: 2px solid theme("colors.blue.600");
   outline-offset: 2px;
 }
+
+/* ---------------------------------------------------------
+   Animación de scroll-reveal (usada por el hook useReveal).
+   Empieza invisible/desplazada y el hook agrega ".is-visible"
+   cuando el elemento entra en el viewport.
+--------------------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Fondo con textura sutil de puntos, usado en secciones destacadas
+   (hero, CTA) para que no se vean planas. */
+.bg-dot-grid {
+  background-image: radial-gradient(theme("colors.blue.100") 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Superficie "shimmer" para skeletons de carga. */
+.bg-shimmer {
+  background: linear-gradient(
+    90deg,
+    theme("colors.slate.100") 25%,
+    theme("colors.slate.200") 37%,
+    theme("colors.slate.100") 63%
+  );
+  background-size: 400% 100%;
+}
+
+/* ---------------------------------------------------------
+   Accesibilidad: quien configuró su sistema para reducir
+   animaciones no debe recibirlas. Neutraliza transiciones,
+   animaciones y scroll suave en todo el sitio.
+--------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

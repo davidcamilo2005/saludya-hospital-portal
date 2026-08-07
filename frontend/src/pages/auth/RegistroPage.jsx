@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../context/AuthContext";
 import { Alert, Button, Card, FormField, Input } from "../../components/ui";
+import { AuthIllustration } from "../../components/illustrations";
 import { validarRegistro } from "../../utils/validadores";
 
 const FORM_INICIAL = {
@@ -58,7 +59,8 @@ export default function RegistroPage() {
 
   return (
     <div className="mx-auto flex max-w-xl flex-col justify-center px-4 py-16">
-      <Card className="p-8">
+      <AuthIllustration className="mx-auto mb-6 h-28 w-28 animate-fade-in-up" />
+      <Card className="animate-fade-in-up p-8" style={{ animationDelay: "100ms" }}>
         <h1 className="text-2xl font-bold text-slate-900">Crea tu cuenta</h1>
         <p className="mt-1 text-sm text-slate-500">
           Regístrate para agendar y gestionar tus citas médicas en línea.

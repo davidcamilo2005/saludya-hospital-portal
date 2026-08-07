@@ -13,9 +13,21 @@ const enlaces = [
 ];
 
 function linkClasses({ isActive }) {
-  return `rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+  return `group relative rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 ${
     isActive ? "text-blue-700" : "text-slate-600 hover:text-blue-700"
   }`;
+}
+
+/** Subrayado animado: crece desde el centro al pasar el mouse o en la ruta activa. */
+function Subrayado({ isActive }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`pointer-events-none absolute inset-x-2 -bottom-0.5 h-0.5 origin-center scale-x-0 rounded-full bg-blue-600 transition-transform duration-200 ease-out group-hover:scale-x-100 ${
+        isActive ? "scale-x-100" : ""
+      }`}
+    />
+  );
 }
 
 export default function Navbar() {
@@ -31,16 +43,27 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur transition-shadow duration-300">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <Link to="/" className="flex items-center gap-2 text-lg font-bold text-blue-700">
-          <span aria-hidden="true">🏥</span> SaludYa
+        <Link
+          to="/"
+          className="flex items-center gap-2 text-lg font-bold text-blue-700 transition-transform duration-200 hover:scale-105"
+        >
+          <span aria-hidden="true" className="inline-block animate-float text-xl">
+            🏥
+          </span>
+          SaludYa
         </Link>
 
         <div className="hidden items-center gap-1 md:flex">
           {enlaces.map((enlace) => (
             <NavLink key={enlace.to} to={enlace.to} className={linkClasses} end={enlace.to === "/"}>
-              {enlace.label}
+              {({ isActive }) => (
+                <>
+                  {enlace.label}
+                  <Subrayado isActive={isActive} />
+                </>
+              )}
             </NavLink>
           ))}
         </div>
@@ -48,7 +71,10 @@ export default function Navbar() {
         <div className="hidden items-center gap-3 md:flex">
           {isAuthenticated ? (
             <>
-              <Link to={cuentaHref} className="text-sm font-medium text-slate-700 hover:text-blue-700">
+              <Link
+                to={cuentaHref}
+                className="text-sm font-medium text-slate-700 transition-colors duration-200 hover:text-blue-700"
+              >
                 Hola, {user.nombre}
               </Link>
               <Button variant="outline" onClick={cerrarSesion}>
@@ -57,7 +83,10 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link to="/login" className="text-sm font-medium text-slate-700 hover:text-blue-700">
+              <Link
+                to="/login"
+                className="text-sm font-medium text-slate-700 transition-colors duration-200 hover:text-blue-700"
+              >
                 Iniciar sesión
               </Link>
               <Link to="/registro">
@@ -69,22 +98,35 @@ export default function Navbar() {
 
         <button
           type="button"
-          className="text-2xl text-slate-600 md:hidden"
-          aria-label="Abrir menú"
+          className="text-2xl text-slate-600 transition-transform duration-200 md:hidden"
+          aria-label={menuAbierto ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={menuAbierto}
           onClick={() => setMenuAbierto((v) => !v)}
         >
-          ☰
+          <span className={`inline-block transition-transform duration-300 ${menuAbierto ? "rotate-90" : ""}`}>
+            {menuAbierto ? "✕" : "☰"}
+          </span>
         </button>
       </nav>
 
-      {menuAbierto && (
-        <div className="border-t border-slate-200 bg-white px-4 py-3 md:hidden">
+      {/* El menú móvil siempre está montado (para poder animarlo con
+          transición de altura/opacidad) pero colapsado cuando está cerrado. */}
+      <div
+        className={`grid overflow-hidden border-t border-slate-200 bg-white transition-all duration-300 ease-out md:hidden ${
+          menuAbierto ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] border-t-0 opacity-0"
+        }`}
+      >
+        <div className="min-h-0 px-4 py-3">
           <div className="flex flex-col gap-1">
             {enlaces.map((enlace) => (
               <NavLink
                 key={enlace.to}
                 to={enlace.to}
-                className={linkClasses}
+                className={({ isActive }) =>
+                  `rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 ${
+                    isActive ? "bg-blue-50 text-blue-700" : "text-slate-600 hover:bg-slate-50 hover:text-blue-700"
+                  }`
+                }
                 onClick={() => setMenuAbierto(false)}
                 end={enlace.to === "/"}
               >
@@ -116,7 +158,7 @@ export default function Navbar() {
             )}
           </div>
         </div>
-      )}
+      </div>
     </header>
   );
 }

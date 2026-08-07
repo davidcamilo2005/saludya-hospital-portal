@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../context/AuthContext";
 import { Button } from "../ui";
@@ -18,7 +18,7 @@ const enlacesAdmin = [
 ];
 
 function itemClasses({ isActive }) {
-  return `block rounded-lg px-3 py-2 text-sm font-medium ${
+  return `block rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-200 ${
     isActive ? "bg-blue-50 text-blue-700" : "text-slate-600 hover:bg-slate-100"
   }`;
 }
@@ -26,6 +26,7 @@ function itemClasses({ isActive }) {
 export default function DashboardLayout() {
   const { user, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const enlaces = isAdmin ? enlacesAdmin : enlacesPaciente;
 
   const cerrarSesion = () => {
@@ -81,7 +82,7 @@ export default function DashboardLayout() {
           ))}
         </nav>
 
-        <main className="flex-1 p-4 md:p-6">
+        <main className="flex-1 animate-fade-in p-4 md:p-6" key={location.pathname}>
           <Outlet />
         </main>
       </div>

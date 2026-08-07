@@ -109,7 +109,7 @@ export default function CitasAdminPage() {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {citas.map((cita) => (
-                  <tr key={cita.id}>
+                  <tr key={cita.id} className="animate-fade-in transition-colors duration-150 hover:bg-blue-50/40">
                     <td className="px-4 py-3 font-medium text-slate-900">
                       Dr(a). {cita.medico.nombre} {cita.medico.apellido}
                     </td>

@@ -87,7 +87,7 @@ export default function AgendarCitaPage() {
   if (cargando) return <PageLoader label="Cargando especialidades y médicos..." />;
 
   return (
-    <div className="mx-auto max-w-2xl">
+    <div className="mx-auto max-w-2xl animate-fade-in-up">
       <h1 className="text-2xl font-bold text-slate-900">Agendar cita</h1>
       <p className="mt-1 text-sm text-slate-500">
         Horario disponible: lunes a sábado, de 7:00 a.m. a 5:00 p.m.

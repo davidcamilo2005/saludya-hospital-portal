@@ -56,7 +56,7 @@ export default function PerfilPage() {
   if (!perfil) return <Alert tone="danger">{error || "No se pudo cargar el perfil."}</Alert>;
 
   return (
-    <div className="mx-auto max-w-2xl">
+    <div className="mx-auto max-w-2xl animate-fade-in-up">
       <h1 className="text-2xl font-bold text-slate-900">Mi perfil</h1>
       <p className="mt-1 text-sm text-slate-500">Mantén tus datos de contacto actualizados.</p>
 

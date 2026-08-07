@@ -10,25 +10,30 @@ import {
   EstadoCitaBadge,
   Modal,
   PageLoader,
+  Reveal,
   Textarea,
 } from "../../components/ui";
+import { InitialsAvatar } from "../../components/illustrations";
 
 function CitaCard({ cita, onCancelar }) {
   const esFutura = new Date(`${cita.fecha}T${cita.hora}`) > new Date();
   const puedeCancelar = cita.estado === "pendiente" && esFutura;
 
   return (
-    <Card className="flex flex-col gap-2 p-5 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <p className="font-semibold text-slate-900">
-          Dr(a). {cita.medico.nombre} {cita.medico.apellido} · {cita.especialidad.nombre}
-        </p>
-        <p className="text-sm text-slate-500">
-          {cita.fecha} a las {cita.hora.slice(0, 5)}
-        </p>
-        {cita.motivo_cancelacion && (
-          <p className="mt-1 text-xs text-slate-400">Motivo de cancelación: {cita.motivo_cancelacion}</p>
-        )}
+    <Card hover className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex items-center gap-3">
+        <InitialsAvatar nombre={cita.medico.nombre} apellido={cita.medico.apellido} />
+        <div>
+          <p className="font-semibold text-slate-900">
+            Dr(a). {cita.medico.nombre} {cita.medico.apellido} · {cita.especialidad.nombre}
+          </p>
+          <p className="text-sm text-slate-500">
+            {cita.fecha} a las {cita.hora.slice(0, 5)}
+          </p>
+          {cita.motivo_cancelacion && (
+            <p className="mt-1 text-xs text-slate-400">Motivo de cancelación: {cita.motivo_cancelacion}</p>
+          )}
+        </div>
       </div>
       <div className="flex items-center gap-3">
         <EstadoCitaBadge estado={cita.estado} />
@@ -110,8 +115,10 @@ export default function MisCitasPage() {
           <EmptyState title="No tienes citas pendientes" description="Agenda una desde el botón superior." />
         ) : (
           <div className="space-y-3">
-            {pendientes.map((cita) => (
-              <CitaCard key={cita.id} cita={cita} onCancelar={setCitaSeleccionada} />
+            {pendientes.map((cita, i) => (
+              <Reveal key={cita.id} delay={i * 60}>
+                <CitaCard cita={cita} onCancelar={setCitaSeleccionada} />
+              </Reveal>
             ))}
           </div>
         )}
@@ -123,8 +130,10 @@ export default function MisCitasPage() {
           <EmptyState title="Aún no tienes historial de citas" />
         ) : (
           <div className="space-y-3">
-            {historial.map((cita) => (
-              <CitaCard key={cita.id} cita={cita} onCancelar={setCitaSeleccionada} />
+            {historial.map((cita, i) => (
+              <Reveal key={cita.id} delay={i * 60}>
+                <CitaCard cita={cita} onCancelar={setCitaSeleccionada} />
+              </Reveal>
             ))}
           </div>
         )}
