@@ -3,6 +3,21 @@
 Todos los cambios notables de este proyecto se documentan en este archivo.
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/).
 
+## [1.1.0] - 2026-08-07
+
+### Added
+
+- Animaciones e ilustraciones SVG propias en todo el frontend (hero de
+  la landing, avatares con iniciales, estados vacíos, página 404,
+  panel de auth), sistema de scroll-reveal (`useReveal`/`<Reveal>`) y
+  micro-interacciones en botones, tarjetas, menú y modales — respetando
+  `prefers-reduced-motion`. Ver commit `feat(frontend): animaciones e
+  ilustraciones SVG en toda la interfaz`.
+- `docs/GUIA_DE_PRUEBAS.md`: guía de verificación end-to-end (cómo
+  comprobar contenedores, logs, backend, base de datos, frontend y
+  pruebas automatizadas), enlazada desde el `README.md` y
+  `docs/MANUAL_DESARROLLADOR.md`.
+
 ## [1.0.0] - 2026-08-07
 
 Primera versión completa y ejecutable del proyecto (Fases 1 a 8 cerradas).

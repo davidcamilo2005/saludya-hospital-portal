@@ -1,9 +1,9 @@
 # 🏥 SaludYa — Portal Web de Gestión Hospitalaria
 
 [![Licencia MIT](https://img.shields.io/badge/licencia-MIT-blue.svg)](LICENSE)
-[![Backend](https://img.shields.io/badge/backend-FastAPI%20%2B%20PostgreSQL-009688.svg)](backend)
-[![Frontend](https://img.shields.io/badge/frontend-React%2018%20%2B%20Vite-61DAFB.svg)](frontend)
-[![Docker](https://img.shields.io/badge/despliegue-Docker%20Compose-2496ED.svg)](docker-compose.yml)
+[![Backend](<https://img.shields.io/badge/backend-FastAPI%20%2B%20PostgreSQL-009688.svg>)](backend)
+[![Frontend](<https://img.shields.io/badge/frontend-React%2018%20%2B%20Vite-61DAFB.svg>)](frontend)
+[![Docker](<https://img.shields.io/badge/despliegue-Docker%20Compose-2496ED.svg>)](docker-compose.yml)
 
 SaludYa es un portal web que permite a los pacientes de un hospital
 **agendar, consultar y cancelar citas médicas en línea**, y a los
@@ -31,6 +31,7 @@ contenerización completa con Docker Compose.
 - [Credenciales de demostración](#credenciales-de-demostración)
 - [Desarrollo sin Docker](#desarrollo-sin-docker)
 - [Pruebas](#pruebas)
+- [¿Cómo verifico que todo funciona?](docs/GUIA_DE_PRUEBAS.md)
 - [Estructura del repositorio](#estructura-del-repositorio)
 - [Documentación](#documentación)
 - [Licencia](#licencia)
@@ -63,12 +64,12 @@ datos, defensa en profundidad):
 
 ## Stack tecnológico
 
-| Capa | Tecnología |
-|---|---|
-| Frontend | React 18, Vite, TailwindCSS, Axios, React Router, Vitest, React Testing Library |
-| Backend | Python 3.11, FastAPI, SQLAlchemy 2, Pydantic v2, python-jose (JWT), passlib (bcrypt), Alembic, Pytest |
-| Base de datos | PostgreSQL 15 |
-| DevOps | Docker, Docker Compose, Nginx (reverse proxy + SPA), GitHub |
+| Capa          | Tecnología                                                                                           |
+| ------------- | ----------------------------------------------------------------------------------------------------- |
+| Frontend      | React 18, Vite, TailwindCSS, Axios, React Router, Vitest, React Testing Library                       |
+| Backend       | Python 3.11, FastAPI, SQLAlchemy 2, Pydantic v2, python-jose (JWT), passlib (bcrypt), Alembic, Pytest |
+| Base de datos | PostgreSQL 15                                                                                         |
+| DevOps        | Docker, Docker Compose, Nginx (reverse proxy + SPA), GitHub                                           |
 
 ---
 
@@ -124,17 +125,23 @@ docker compose up --build
 
 Servicios disponibles:
 
-| Servicio | URL |
-|---|---|
-| Frontend | http://localhost:8080 |
-| Backend (API) | http://localhost:8000 |
+| Servicio                             | URL                        |
+| ------------------------------------ | -------------------------- |
+| Frontend                             | http://localhost:8080      |
+| Backend (API)                        | http://localhost:8000      |
 | Documentación interactiva (Swagger) | http://localhost:8000/docs |
-| PostgreSQL | localhost:5432 |
+| PostgreSQL                           | localhost:5432             |
 
 La primera vez que se crea el volumen de PostgreSQL, se ejecutan
 automáticamente `database/schema.sql` (estructura) y
 `database/seed.sql` (datos de demostración: especialidades, médicos y
 las cuentas de la sección siguiente).
+
+> ✅ ¿Cómo saber si todo quedó funcionando bien? Ver
+> [`docs/GUIA_DE_PRUEBAS.md`](docs/GUIA_DE_PRUEBAS.md): cómo revisar
+> que los contenedores están corriendo, ver sus logs, probar la API,
+> revisar los datos en la base de datos y correr las pruebas
+> automatizadas.
 
 Para detener y eliminar los contenedores (conservando los datos):
 
@@ -154,10 +161,10 @@ docker compose down -v
 
 Sembradas por `database/seed.sql`:
 
-| Rol | Correo | Contraseña |
-|---|---|---|
-| Administrador | `admin@saludya.com` | `Admin1234` |
-| Paciente | `paciente@saludya.com` | `Paciente1234` |
+| Rol           | Correo                   | Contraseña      |
+| ------------- | ------------------------ | ---------------- |
+| Administrador | `admin@saludya.com`    | `Admin1234`    |
+| Paciente      | `paciente@saludya.com` | `Paciente1234` |
 
 ---
 
@@ -243,14 +250,15 @@ saludya-hospital-portal/
 
 ## Documentación
 
-| Documento | Contenido |
-|---|---|
-| [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md) | Clean Architecture, modelo de datos, decisiones de diseño |
-| [`docs/API.md`](docs/API.md) | Referencia completa de los 26 endpoints |
-| [`docs/MANUAL_USUARIO.md`](docs/MANUAL_USUARIO.md) | Guía de uso para pacientes y administradores |
-| [`docs/MANUAL_DESARROLLADOR.md`](docs/MANUAL_DESARROLLADOR.md) | Puesta en marcha, convenciones y solución de problemas |
-| [`docs/INFORME.md`](docs/INFORME.md) | Informe universitario completo (Fase 8) |
-| [`docs/fases/`](docs/fases/) | Registro de las 8 fases de desarrollo, en orden |
+| Documento                                                       | Contenido                                                  |
+| --------------------------------------------------------------- | ---------------------------------------------------------- |
+| [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md)                 | Clean Architecture, modelo de datos, decisiones de diseño |
+| [`docs/API.md`](docs/API.md)                                   | Referencia completa de los 26 endpoints                    |
+| [`docs/MANUAL_USUARIO.md`](docs/MANUAL_USUARIO.md)             | Guía de uso para pacientes y administradores              |
+| [`docs/MANUAL_DESARROLLADOR.md`](docs/MANUAL_DESARROLLADOR.md) | Puesta en marcha, convenciones y solución de problemas    |
+| [`docs/GUIA_DE_PRUEBAS.md`](docs/GUIA_DE_PRUEBAS.md)           | Cómo verificar que todo funciona: contenedores, logs, base de datos, pruebas automatizadas |
+| [`docs/INFORME.md`](docs/INFORME.md)                           | Informe universitario completo (Fase 8)                    |
+| [`docs/fases/`](docs/fases/)                                   | Registro de las 8 fases de desarrollo, en orden            |
 
 ## Licencia
 

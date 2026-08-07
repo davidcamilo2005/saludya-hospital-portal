@@ -2,6 +2,11 @@
 
 Guía para clonar, ejecutar, probar y extender este repositorio.
 
+> 🔍 Si lo que buscas es **verificar que todo esté funcionando**
+> (contenedores, logs, base de datos, pruebas), ve directo a
+> [`docs/GUIA_DE_PRUEBAS.md`](GUIA_DE_PRUEBAS.md) — este manual se
+> enfoca en la puesta en marcha y las convenciones de desarrollo.
+
 ## 1. Requisitos
 
 | Vía | Requisitos |

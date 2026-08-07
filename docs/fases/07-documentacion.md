@@ -23,6 +23,7 @@ por el master prompt — sección "DESARROLLO").
 | [`docs/API.md`](../API.md) | Desarrolladores frontend/integradores | Referencia completa de los 26 endpoints: método, ruta, rol requerido, payload, respuesta, códigos de error. |
 | [`docs/MANUAL_USUARIO.md`](../MANUAL_USUARIO.md) | Pacientes y administradores finales | Guía paso a paso de cada funcionalidad, sin asumir conocimiento técnico. |
 | [`docs/MANUAL_DESARROLLADOR.md`](../MANUAL_DESARROLLADOR.md) | Cualquier desarrollador que clone el repositorio | Puesta en marcha (con y sin Docker), estructura de carpetas, convenciones, solución de problemas comunes. |
+| [`docs/GUIA_DE_PRUEBAS.md`](../GUIA_DE_PRUEBAS.md) | Quien necesite comprobar que el sistema funciona (entrega, demo, revisión) | Cómo verificar contenedores, logs, backend, base de datos y frontend; cómo correr y leer el resultado de las pruebas automatizadas; checklist y solución de problemas. Añadido después del cierre inicial de esta fase, a solicitud explícita, sin asumir conocimiento previo de Docker. |
 | [`docs/INFORME.md`](../INFORME.md) | Evaluación académica | Informe universitario completo (Fase 8): portada, introducción, marco teórico, metodología, desarrollo, pruebas, resultados, conclusiones, bibliografía. |
 
 ## 3. Marcadores de imagen
