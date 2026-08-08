@@ -3,6 +3,31 @@
 Todos los cambios notables de este proyecto se documentan en este archivo.
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/).
 
+## [1.2.0] - 2026-08-07
+
+### Added
+
+- `docs/evidencias/`: tres documentos formales por tema, a solicitud
+  explícita (requisito del profesor: un documento por cada uno de los
+  tres temas — testing frontend, testing backend, Docker Compose —
+  explicando qué es cada herramienta, qué función cumple, dónde se
+  practica en el proyecto, cómo se instala/incluye, y evidencia real
+  de sus pruebas y salidas):
+  - `01-testing-frontend-vitest.md`: incluye la transcripción real
+    (no simulada) de `npx vitest run --reporter=verbose` (41/41
+    pruebas), `npm run build` y `npm run lint`, con explicación de
+    cómo leer cada resultado.
+  - `02-testing-backend-pytest.md`: incluye la transcripción real de
+    `pytest -v --cov=app` (67 passed + 1 xfail documentado, 96% de
+    cobertura), explicando por qué existe el `xfail` y por qué no es
+    un problema.
+  - `03-docker-compose.md`: explica Docker/Docker Compose y su rol en
+    el proyecto, con nota explícita de transparencia sobre el entorno
+    de trabajo — el código se desarrolló en VS Code sin Docker
+    instalado, por lo que se subió a GitHub y se verificó ejecutando
+    `docker compose up --build` en un computador distinto que sí tenía
+    Docker Desktop instalado.
+
 ## [1.1.0] - 2026-08-07
 
 ### Added

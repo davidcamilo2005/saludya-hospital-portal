@@ -9,6 +9,14 @@ hace y qué deberías ver si todo está bien.
 No hace falta seguirla completa de una vez: usa el índice para ir
 directo a lo que necesitas revisar.
 
+> 📑 Esta guía es **práctica** (comandos y qué hacer). Si necesitas un
+> **documento formal por tema** —qué es cada herramienta, qué función
+> cumple, dónde se practica en el proyecto y la evidencia real de sus
+> pruebas— ver `docs/evidencias/`:
+> [`01-testing-frontend-vitest.md`](evidencias/01-testing-frontend-vitest.md),
+> [`02-testing-backend-pytest.md`](evidencias/02-testing-backend-pytest.md) y
+> [`03-docker-compose.md`](evidencias/03-docker-compose.md).
+
 ## Índice
 
 1. [Antes de empezar](#1-antes-de-empezar)
@@ -93,10 +101,10 @@ saludya_frontend    saludya-frontend      Up 2 minutes              0.0.0.0:8080
 
 **Qué revisar:**
 
-| Columna | Qué significa | Qué esperar |
-|---|---|---|
-| `STATUS` | Estado del contenedor | `Up ... (healthy)` — nunca `Restarting` ni `Exited` |
-| `PORTS` | Puertos expuestos a tu computador | Deben coincidir con `docker-compose.yml`/`.env` (por defecto 5432, 8000, 8080) |
+| Columna    | Qué significa                    | Qué esperar                                                                      |
+| ---------- | --------------------------------- | --------------------------------------------------------------------------------- |
+| `STATUS` | Estado del contenedor             | `Up ... (healthy)` — nunca `Restarting` ni `Exited`                        |
+| `PORTS`  | Puertos expuestos a tu computador | Deben coincidir con`docker-compose.yml`/`.env` (por defecto 5432, 8000, 8080) |
 
 Si un contenedor dice `Restarting` una y otra vez, o `Exited (1)`, algo
 falló en su arranque — ve directo a la sección de
@@ -241,13 +249,13 @@ Si prefieres una interfaz gráfica, puedes conectar cualquier cliente
 de PostgreSQL (por ejemplo [DBeaver](https://dbeaver.io/) o
 [pgAdmin](https://www.pgadmin.org/), ambos gratuitos) con estos datos:
 
-| Campo | Valor |
-|---|---|
-| Host | `localhost` |
-| Puerto | `5432` |
-| Base de datos | `saludya` |
-| Usuario | `saludya` |
-| Contraseña | `saludya` (o el valor que hayas puesto en tu `.env`) |
+| Campo         | Valor                                                    |
+| ------------- | -------------------------------------------------------- |
+| Host          | `localhost`                                            |
+| Puerto        | `5432`                                                 |
+| Base de datos | `saludya`                                              |
+| Usuario       | `saludya`                                              |
+| Contraseña   | `saludya` (o el valor que hayas puesto en tu `.env`) |
 
 ## 7. Verificar el frontend (la página web)
 
@@ -365,7 +373,7 @@ npm test
       Tests  41 passed (41)
 ```
 
-Un ✗ en vez de ✓ marca un archivo con pruebas fallidas; Vitest imprime
+Un ✗ en vez de ✓ marca un archivo con pruebas fallidas; Vitest imprimes
 justo debajo qué esperaba el test y qué recibió en realidad.
 
 ```bash
@@ -396,33 +404,33 @@ verías en `docker compose logs` durante el build.
 Usa esta tabla como resumen antes de dar por buena una entrega o una
 demo:
 
-| Verificación | Comando / lugar | Resultado esperado |
-|---|---|---|
-| Contenedores arriba | `docker compose ps` | Los 3 en `Up`, `db` y `backend` en `(healthy)` |
-| Backend responde | `http://localhost:8000/health` | `{"status":"ok"}` |
-| Swagger carga | `http://localhost:8000/docs` | Página con la lista de endpoints |
-| Login de admin funciona | Swagger → `POST /auth/login` | `200` + `access_token` |
-| Base de datos poblada | `docker compose exec db psql -U saludya -d saludya -c "\dt"` | 6 tablas listadas |
-| Frontend carga | `http://localhost:8080` | Landing visible, sin pantalla en blanco |
-| Consola del navegador limpia | DevTools → Console | Sin texto en rojo |
-| Flujo completo paciente→admin | Sección 8 de esta guía | Los 9 pasos sin error |
-| Pruebas backend | `pytest` (dentro de `backend/`) | `67 passed, 1 xfailed` |
-| Pruebas frontend | `npm test` (dentro de `frontend/`) | `41 passed` |
-| Lint frontend | `npm run lint` (dentro de `frontend/`) | `0 errores` |
-| Build de producción | `npm run build` (dentro de `frontend/`) | `✓ built` sin errores |
+| Verificación                  | Comando / lugar                                                | Resultado esperado                                    |
+| ------------------------------ | -------------------------------------------------------------- | ----------------------------------------------------- |
+| Contenedores arriba            | `docker compose ps`                                          | Los 3 en`Up`, `db` y `backend` en `(healthy)` |
+| Backend responde               | `http://localhost:8000/health`                               | `{"status":"ok"}`                                   |
+| Swagger carga                  | `http://localhost:8000/docs`                                 | Página con la lista de endpoints                     |
+| Login de admin funciona        | Swagger →`POST /auth/login`                                 | `200` + `access_token`                            |
+| Base de datos poblada          | `docker compose exec db psql -U saludya -d saludya -c "\dt"` | 6 tablas listadas                                     |
+| Frontend carga                 | `http://localhost:8080`                                      | Landing visible, sin pantalla en blanco               |
+| Consola del navegador limpia   | DevTools → Console                                            | Sin texto en rojo                                     |
+| Flujo completo paciente→admin | Sección 8 de esta guía                                       | Los 9 pasos sin error                                 |
+| Pruebas backend                | `pytest` (dentro de `backend/`)                            | `67 passed, 1 xfailed`                              |
+| Pruebas frontend               | `npm test` (dentro de `frontend/`)                         | `41 passed`                                         |
+| Lint frontend                  | `npm run lint` (dentro de `frontend/`)                     | `0 errores`                                         |
+| Build de producción           | `npm run build` (dentro de `frontend/`)                    | `✓ built` sin errores                              |
 
 ## 12. Solución de problemas comunes
 
-| Síntoma | Cómo confirmarlo | Solución |
-|---|---|---|
-| Un contenedor está en `Restarting` sin parar | `docker compose ps` | `docker compose logs <servicio>` para ver el error exacto que causa el reinicio |
-| `docker compose up` falla con "port is already allocated" | El mensaje lo dice explícitamente (puerto 5432, 8000 u 8080 ocupado) | Cierra el programa que use ese puerto, o cambia `POSTGRES_PORT`/`BACKEND_PORT`/`FRONTEND_PORT` en tu `.env` |
-| El frontend carga pero las páginas no traen datos | DevTools → pestaña Network, revisa el código de estado de las peticiones a `/api/v1/...` | Si da error de conexión: revisa que `backend` esté `(healthy)`. Si da `401`/`403`: normal si no iniciaste sesión con el rol correcto |
-| `seed.sql` no parece haberse aplicado (tablas vacías) | Sección 6.1 de esta guía | El volumen de datos ya existía de una corrida anterior — `docker compose down -v` y vuelve a levantar (esto borra los datos y los recrea desde cero) |
-| Cambié código pero no se refleja en el navegador | — | Los contenedores de Docker usan el código *copiado durante el build*: hay que reconstruir con `docker compose up --build` (no basta con `docker compose restart`) |
-| `pytest` falla con `ModuleNotFoundError: No module named 'psycopg2'` | El traceback lo indica | No se instalaron las dependencias en el entorno activo: `pip install -r requirements-dev.txt` con el `.venv` activado |
-| Quiero ver qué variables de entorno recibió realmente un contenedor | — | `docker compose exec backend env` (o `frontend`/`db`) lista todas las variables tal como las ve el proceso adentro |
-| Quiero "entrar" a un contenedor para investigar a mano | — | `docker compose exec backend bash` (Alpine/Nginx del frontend: `docker compose exec frontend sh`) |
+| Síntoma                                                                 | Cómo confirmarlo                                                                            | Solución                                                                                                                                                               |
+| ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Un contenedor está en`Restarting` sin parar                           | `docker compose ps`                                                                        | `docker compose logs <servicio>` para ver el error exacto que causa el reinicio                                                                                       |
+| `docker compose up` falla con "port is already allocated"              | El mensaje lo dice explícitamente (puerto 5432, 8000 u 8080 ocupado)                        | Cierra el programa que use ese puerto, o cambia`POSTGRES_PORT`/`BACKEND_PORT`/`FRONTEND_PORT` en tu `.env`                                                      |
+| El frontend carga pero las páginas no traen datos                       | DevTools → pestaña Network, revisa el código de estado de las peticiones a`/api/v1/...` | Si da error de conexión: revisa que`backend` esté `(healthy)`. Si da `401`/`403`: normal si no iniciaste sesión con el rol correcto                          |
+| `seed.sql` no parece haberse aplicado (tablas vacías)                 | Sección 6.1 de esta guía                                                                   | El volumen de datos ya existía de una corrida anterior —`docker compose down -v` y vuelve a levantar (esto borra los datos y los recrea desde cero)                 |
+| Cambié código pero no se refleja en el navegador                       | —                                                                                           | Los contenedores de Docker usan el código*copiado durante el build*: hay que reconstruir con `docker compose up --build` (no basta con `docker compose restart`) |
+| `pytest` falla con `ModuleNotFoundError: No module named 'psycopg2'` | El traceback lo indica                                                                       | No se instalaron las dependencias en el entorno activo:`pip install -r requirements-dev.txt` con el `.venv` activado                                                |
+| Quiero ver qué variables de entorno recibió realmente un contenedor    | —                                                                                           | `docker compose exec backend env` (o `frontend`/`db`) lista todas las variables tal como las ve el proceso adentro                                                |
+| Quiero "entrar" a un contenedor para investigar a mano                   | —                                                                                           | `docker compose exec backend bash` (Alpine/Nginx del frontend: `docker compose exec frontend sh`)                                                                   |
 
 Ver también la tabla de solución de problemas de
 [`docs/MANUAL_DESARROLLADOR.md`](MANUAL_DESARROLLADOR.md#8-solución-de-problemas-comunes),
