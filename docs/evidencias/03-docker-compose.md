@@ -9,13 +9,66 @@
 | **Repositorio** | [`saludya-hospital-portal`](https://github.com/davidcamilo2005/saludya-hospital-portal) |
 | **Carpeta del proyecto donde se practica este tema** | [`docker-compose.yml`](../../docker-compose.yml) (raíz), [`backend/Dockerfile`](../../backend/Dockerfile), [`frontend/Dockerfile`](../../frontend/Dockerfile), [`frontend/nginx.conf`](../../frontend/nginx.conf) |
 | **Entorno de desarrollo del código** | Visual Studio Code (VS Code), sobre Windows |
-| **Entorno de verificación de Docker** | Computador del estudiante, con **Docker Desktop** instalado (ver nota de la sección 2) |
+| **Entorno de verificación de Docker** | Computador del estudiante, con **Docker Desktop** instalado (ver nota de la sección 3) |
 | **Control de versiones** | Git + GitHub |
 | **Fecha de la evidencia** | Agosto de 2026 |
 
 ---
 
-## 1. ¿Qué son Docker y Docker Compose, y qué papel cumplen en este proyecto?
+## 1. Descripción general del proyecto: SaludYa
+
+Antes de describir la herramienta específica de este documento, es
+necesario describir el proyecto sobre el cual se aplica, ya que la
+contenerización no tiene sentido por sí sola: existe para desplegar un
+sistema real.
+
+### 1.1 Problema que resuelve
+
+Actualmente, muchas personas deben acudir físicamente a un hospital
+únicamente para realizar trámites administrativos sencillos: solicitar
+una cita, consultarla, cancelarla, o simplemente conocer los horarios
+y especialidades disponibles. Esto provoca congestión en las
+instalaciones, filas largas, pérdida de tiempo para el paciente,
+retrasos en la atención y sobrecarga del personal administrativo —
+recursos que podrían concentrarse en pacientes que realmente requieren
+atención presencial.
+
+### 1.2 Qué es SaludYa
+
+**SaludYa — Portal Web de Gestión Hospitalaria** es un sistema web que
+digitaliza esos trámites administrativos: permite a un paciente
+registrarse, iniciar sesión, y agendar, consultar y cancelar sus citas
+médicas en línea; y permite a un administrador del hospital gestionar
+médicos, especialidades y el flujo completo de citas desde un panel
+propio. El sistema aplica reglas reales de negocio de un hospital:
+horario de atención (7:00 a. m. a 5:00 p. m.), prohibición de citas
+los domingos, y la imposibilidad de que un mismo médico tenga dos
+citas activas a la misma fecha y hora.
+
+### 1.3 Módulos del sistema
+
+| Módulo | Funcionalidades |
+|---|---|
+| Público | Landing institucional, historia/misión/visión, listado de especialidades, listado de médicos, contacto, preguntas frecuentes. |
+| Paciente | Registro, inicio de sesión, edición de perfil, agendar cita (validando horario, día y disponibilidad del médico), consultar citas (pendientes e historial) y cancelarlas. |
+| Administrador | Dashboard con métricas en tiempo real, CRUD de médicos, CRUD de especialidades, gestión y cancelación de cualquier cita, administración de pacientes. |
+
+### 1.4 Stack tecnológico completo del proyecto
+
+| Capa | Tecnología |
+|---|---|
+| Frontend | React 18, Vite, TailwindCSS, Axios, React Router, Vitest, React Testing Library |
+| Backend | Python 3.11, FastAPI, SQLAlchemy 2, Pydantic v2, python-jose (JWT), passlib (bcrypt), Alembic, Pytest |
+| Base de datos | PostgreSQL 15, normalizada hasta 3FN |
+| DevOps | Docker, Docker Compose, Nginx (reverse proxy + SPA), Git, GitHub |
+
+Este documento se enfoca específicamente en la **contenerización con
+Docker**; el frontend y el backend por separado se documentan, con el
+mismo nivel de detalle, en
+[`01-testing-frontend-vitest.md`](01-testing-frontend-vitest.md) y
+[`02-testing-backend-pytest.md`](02-testing-backend-pytest.md).
+
+## 2. ¿Qué son Docker y Docker Compose, y qué papel cumplen en este proyecto?
 
 **Docker** es una plataforma de **contenerización**: empaqueta una
 aplicación junto con *todo* lo que necesita para funcionar (el
@@ -54,7 +107,7 @@ exactamente como lo harían en un entorno real.
 
 ---
 
-## 2. Entorno de trabajo: por qué el código se probó con Docker en otra máquina
+## 3. Entorno de trabajo: por qué el código se probó con Docker en otra máquina
 
 > **Esta es una aclaración importante y honesta sobre cómo se
 > construyó y verificó este proyecto**, no un detalle menor.
@@ -85,9 +138,9 @@ en lugar de copiar archivos manualmente entre computadores.
 
 ---
 
-## 3. Qué se instaló y cómo se incluyó en el proyecto
+## 4. Qué se instaló y cómo se incluyó en el proyecto
 
-### 3.1 Instalación de Docker Desktop
+### 4.1 Instalación de Docker Desktop
 
 Docker Desktop se descarga gratuitamente desde
 <https://www.docker.com/products/docker-desktop/> (incluye Docker
@@ -97,7 +150,7 @@ barra de tareas) antes de usar cualquier comando `docker`.
 
 [INSERTAR CAPTURA: Docker Desktop instalado, ícono en la barra de tareas / pantalla principal de la aplicación]
 
-### 3.2 Cómo se incluyó Docker en el proyecto (archivos de configuración)
+### 4.2 Cómo se incluyó Docker en el proyecto (archivos de configuración)
 
 A diferencia de Pytest o Vitest, Docker no se "instala" dentro del
 código del proyecto: se **describe** mediante archivos de
@@ -115,7 +168,7 @@ repositorio puede usar sin instalar nada más que Docker Desktop:
 
 ---
 
-## 4. Cómo se ejecuta el sistema completo (paso a paso)
+## 5. Cómo se ejecuta el sistema completo (paso a paso)
 
 ```bash
 git clone https://github.com/davidcamilo2005/saludya-hospital-portal.git
@@ -150,7 +203,7 @@ Guía extendida, con más comandos y solución de problemas, en
 
 ---
 
-## 5. Evidencia de la ejecución
+## 6. Evidencia de la ejecución
 
 > **Nota de transparencia:** a diferencia de los documentos 01
 > (Vitest) y 02 (Pytest) de esta misma carpeta —donde la salida
@@ -166,7 +219,7 @@ Guía extendida, con más comandos y solución de problemas, en
 > ejecutó y se confirmó visualmente que la aplicación cargaba
 > correctamente**.
 
-### 5.1 Estado esperado de los contenedores (`docker compose ps`)
+### 6.1 Estado esperado de los contenedores (`docker compose ps`)
 
 Según los nombres de servicio, imágenes y puertos definidos en
 `docker-compose.yml`, la salida de este comando, con el sistema
@@ -183,7 +236,7 @@ saludya_frontend    saludya-frontend      Up X minutes              0.0.0.0:8080
 
 [INSERTAR CAPTURA REAL: Docker Desktop → pestaña "Containers", mostrando el grupo `saludya` con los tres contenedores en verde]
 
-### 5.2 Verificación del backend dentro de Docker
+### 6.2 Verificación del backend dentro de Docker
 
 Con el sistema arriba, `http://localhost:8000/health` debe responder:
 
@@ -198,7 +251,7 @@ un entorno virtual local).
 
 [INSERTAR CAPTURA REAL: navegador mostrando `http://localhost:8000/docs` con la API corriendo desde Docker]
 
-### 5.3 Verificación del frontend dentro de Docker
+### 6.3 Verificación del frontend dentro de Docker
 
 `http://localhost:8080` debe mostrar la landing de SaludYa, servida
 por **Nginx** desde los archivos estáticos generados por
@@ -209,7 +262,7 @@ se verificó de forma aislada en el documento 01.
 
 [INSERTAR CAPTURA REAL: recorrido funcional — login, agendar una cita, panel de administrador — confirmando que frontend, backend y base de datos funcionan integrados dentro de Docker]
 
-### 5.4 Verificación de la base de datos dentro de Docker
+### 6.4 Verificación de la base de datos dentro de Docker
 
 ```bash
 docker compose exec db psql -U saludya -d saludya -c "\dt"
@@ -231,7 +284,7 @@ por `database/seed.sql` (`admin@saludya.com` y `paciente@saludya.com`).
 
 ---
 
-## 6. Interpretación de resultados — cómo leer la salida
+## 7. Interpretación de resultados — cómo leer la salida
 
 | Elemento | Qué significa |
 |---|---|
@@ -243,7 +296,7 @@ por `database/seed.sql` (`admin@saludya.com` y `paciente@saludya.com`).
 
 ---
 
-## 7. Relación con el resto del proyecto
+## 8. Relación con el resto del proyecto
 
 Este documento cierra el ciclo de verificación que empiezan los
 documentos 01 y 02: Vitest y Pytest prueban **cada parte por
@@ -254,7 +307,7 @@ base de datos PostgreSQL real —incluyendo el detalle que SQLite no
 podía validar en el documento 02: el índice único parcial que impide
 la doble reserva de citas—.
 
-## 8. Conclusión
+## 9. Conclusión
 
 Docker y Docker Compose cumplen en SaludYa el papel de **empaquetar y
 orquestar el sistema completo** para que cualquier persona —un
@@ -268,7 +321,7 @@ sí contaba con Docker Desktop instalado — quedando pendiente
 únicamente completar los espacios de captura de pantalla marcados en
 la sección 5 con la evidencia visual de esa ejecución.
 
-## 9. Referencias
+## 10. Referencias
 
 - Documentación oficial de Docker: <https://docs.docker.com/>
 - Documentación oficial de Docker Compose: <https://docs.docker.com/compose/>

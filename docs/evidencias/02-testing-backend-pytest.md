@@ -14,7 +14,60 @@
 
 ---
 
-## 1. ¿Qué es Pytest y qué papel cumple en este proyecto?
+## 1. Descripción general del proyecto: SaludYa
+
+Antes de describir la herramienta específica de este documento, es
+necesario describir el proyecto sobre el cual se aplica, ya que las
+pruebas no tienen sentido por sí solas: existen para verificar un
+sistema real.
+
+### 1.1 Problema que resuelve
+
+Actualmente, muchas personas deben acudir físicamente a un hospital
+únicamente para realizar trámites administrativos sencillos: solicitar
+una cita, consultarla, cancelarla, o simplemente conocer los horarios
+y especialidades disponibles. Esto provoca congestión en las
+instalaciones, filas largas, pérdida de tiempo para el paciente,
+retrasos en la atención y sobrecarga del personal administrativo —
+recursos que podrían concentrarse en pacientes que realmente requieren
+atención presencial.
+
+### 1.2 Qué es SaludYa
+
+**SaludYa — Portal Web de Gestión Hospitalaria** es un sistema web que
+digitaliza esos trámites administrativos: permite a un paciente
+registrarse, iniciar sesión, y agendar, consultar y cancelar sus citas
+médicas en línea; y permite a un administrador del hospital gestionar
+médicos, especialidades y el flujo completo de citas desde un panel
+propio. El sistema aplica reglas reales de negocio de un hospital:
+horario de atención (7:00 a. m. a 5:00 p. m.), prohibición de citas
+los domingos, y la imposibilidad de que un mismo médico tenga dos
+citas activas a la misma fecha y hora.
+
+### 1.3 Módulos del sistema
+
+| Módulo | Funcionalidades |
+|---|---|
+| Público | Landing institucional, historia/misión/visión, listado de especialidades, listado de médicos, contacto, preguntas frecuentes. |
+| Paciente | Registro, inicio de sesión, edición de perfil, agendar cita (validando horario, día y disponibilidad del médico), consultar citas (pendientes e historial) y cancelarlas. |
+| Administrador | Dashboard con métricas en tiempo real, CRUD de médicos, CRUD de especialidades, gestión y cancelación de cualquier cita, administración de pacientes. |
+
+### 1.4 Stack tecnológico completo del proyecto
+
+| Capa | Tecnología |
+|---|---|
+| Frontend | React 18, Vite, TailwindCSS, Axios, React Router, Vitest, React Testing Library |
+| Backend | Python 3.11, FastAPI, SQLAlchemy 2, Pydantic v2, python-jose (JWT), passlib (bcrypt), Alembic, Pytest |
+| Base de datos | PostgreSQL 15, normalizada hasta 3FN |
+| DevOps | Docker, Docker Compose, Nginx (reverse proxy + SPA), Git, GitHub |
+
+Este documento se enfoca específicamente en el **backend**; el
+frontend y la contenerización con Docker se documentan, con el mismo
+nivel de detalle, en
+[`01-testing-frontend-vitest.md`](01-testing-frontend-vitest.md) y
+[`03-docker-compose.md`](03-docker-compose.md).
+
+## 2. ¿Qué es Pytest y qué papel cumple en este proyecto?
 
 **Pytest** es el **framework de pruebas automatizadas** más usado del
 ecosistema Python. Su función es descubrir automáticamente archivos y
@@ -41,9 +94,9 @@ API, no una versión simplificada.
 
 ---
 
-## 2. Entorno de trabajo y cómo se instaló
+## 3. Entorno de trabajo y cómo se instaló
 
-### 2.1 Dónde se desarrolló
+### 3.1 Dónde se desarrolló
 
 El backend (FastAPI + SQLAlchemy + las pruebas de este documento) se
 escribió en **Visual Studio Code**, sobre Windows, y se versionó con
@@ -56,7 +109,7 @@ escribió en **Visual Studio Code**, sobre Windows, y se versionó con
 > propósito: Pytest está pensado para el ciclo rápido de
 > desarrollo/prueba, y para no depender de un PostgreSQL real, la
 > suite corre contra una base de datos **SQLite en memoria** (ver
-> sección 3). Docker entra en juego después, para levantar el sistema
+> sección 4.2). Docker entra en juego después, para levantar el sistema
 > completo con PostgreSQL de verdad (documentado en
 > [`03-docker-compose.md`](03-docker-compose.md)). De hecho, Docker no
 > estaba disponible en todos los entornos usados durante el
@@ -64,7 +117,7 @@ escribió en **Visual Studio Code**, sobre Windows, y se versionó con
 > que se subió a GitHub fue justamente para poder probarlo también en
 > una máquina con Docker Desktop instalado.
 
-### 2.2 Qué se descargó y cómo se incluyó en el proyecto
+### 3.2 Qué se descargó y cómo se incluyó en el proyecto
 
 Igual que en el frontend, Pytest no se instala "suelto": está
 declarado como dependencia dentro de
@@ -116,9 +169,9 @@ automáticamente.
 
 ---
 
-## 3. Dónde y cómo se está practicando este tema en el proyecto
+## 4. Dónde y cómo se está practicando este tema en el proyecto
 
-### 3.1 Estructura de la suite
+### 4.1 Estructura de la suite
 
 ```
 backend/tests/
@@ -132,7 +185,7 @@ backend/tests/
 └── test_dashboard.py             # Métricas del panel administrativo
 ```
 
-### 3.2 Estrategia de aislamiento: ¿por qué SQLite y no PostgreSQL?
+### 4.2 Estrategia de aislamiento: ¿por qué SQLite y no PostgreSQL?
 
 Cada prueba corre contra una base de datos **SQLite en memoria**,
 creada desde cero y destruida al terminar cada prueba individual (ver
@@ -148,9 +201,9 @@ prueba a otra). **Limitación conocida y documentada:** SQLite no
 soporta *índices únicos parciales* como el que usa
 `database/schema.sql` para la regla "no dos citas activas en el mismo
 horario"; esto produce exactamente **una** prueba marcada como
-`xfail` (fallo esperado, ver sección 5).
+`xfail` (fallo esperado, ver sección 6).
 
-### 3.3 Fixtures reutilizables (extracto de `conftest.py`)
+### 4.3 Fixtures reutilizables (extracto de `conftest.py`)
 
 ```python
 @pytest.fixture()
@@ -174,7 +227,7 @@ la misma preparación en cada una de las 68 pruebas.
 
 ---
 
-## 4. Cómo se ejecutan las pruebas (paso a paso)
+## 5. Cómo se ejecutan las pruebas (paso a paso)
 
 ```bash
 cd backend
@@ -190,7 +243,7 @@ regenera cada vez que se corre `pytest`).
 
 ---
 
-## 5. Evidencia real de la ejecución (salida obtenida)
+## 6. Evidencia real de la ejecución (salida obtenida)
 
 > La salida que sigue es la **transcripción textual real** de haber
 > instalado las dependencias desde cero en un entorno virtual limpio y
@@ -199,7 +252,7 @@ regenera cada vez que se corre `pytest`).
 
 [INSERTAR CAPTURA: terminal de VS Code ejecutando `pytest`, con el resumen final en verde]
 
-### 5.1 Resultado de `pytest -v --cov=app --cov-report=term-missing`
+### 6.1 Resultado de `pytest -v --cov=app --cov-report=term-missing`
 
 ```
 testpaths: tests
@@ -276,7 +329,7 @@ tests/test_security.py::test_decode_access_token_invalido PASSED         [ 98%]
 tests/test_security.py::test_decode_access_token_expirado PASSED         [100%]
 ```
 
-### 5.2 Reporte de cobertura de código
+### 6.2 Reporte de cobertura de código
 
 ```
 Name                                Stmts   Miss  Cover   Missing
@@ -317,7 +370,7 @@ exigido en la planificación del proyecto (Fase 1).
 
 ---
 
-## 6. Interpretación de resultados — cómo leer la salida
+## 7. Interpretación de resultados — cómo leer la salida
 
 | Símbolo / texto | Qué significa |
 |---|---|
@@ -345,7 +398,7 @@ de [`docs/GUIA_DE_PRUEBAS.md`](../GUIA_DE_PRUEBAS.md).
 
 ---
 
-## 7. Relación con el resto del proyecto
+## 8. Relación con el resto del proyecto
 
 Pytest prueba el backend **en aislamiento** (sin frontend, sin Docker,
 con SQLite en memoria en vez de PostgreSQL). Esto permite obtener
@@ -365,7 +418,7 @@ para el sistema completo integrado con Docker.
 
 ---
 
-## 8. Conclusión
+## 9. Conclusión
 
 Pytest cumple en SaludYa el papel de **verificador automático de las
 reglas de negocio del hospital**: horarios permitidos, no-domingos,
@@ -376,7 +429,7 @@ al momento de esta entrega, el backend cumple con las reglas
 definidas en la planificación del proyecto (Fase 1) y supera el
 mínimo de cobertura exigido.
 
-## 9. Referencias
+## 10. Referencias
 
 - Documentación oficial de Pytest: <https://docs.pytest.org/>
 - Documentación oficial de `coverage.py`: <https://coverage.readthedocs.io/>

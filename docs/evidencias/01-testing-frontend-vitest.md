@@ -14,7 +14,60 @@
 
 ---
 
-## 1. ¿Qué es Vitest y qué papel cumple en este proyecto?
+## 1. Descripción general del proyecto: SaludYa
+
+Antes de describir la herramienta específica de este documento, es
+necesario describir el proyecto sobre el cual se aplica, ya que las
+pruebas no tienen sentido por sí solas: existen para verificar un
+sistema real.
+
+### 1.1 Problema que resuelve
+
+Actualmente, muchas personas deben acudir físicamente a un hospital
+únicamente para realizar trámites administrativos sencillos: solicitar
+una cita, consultarla, cancelarla, o simplemente conocer los horarios
+y especialidades disponibles. Esto provoca congestión en las
+instalaciones, filas largas, pérdida de tiempo para el paciente,
+retrasos en la atención y sobrecarga del personal administrativo —
+recursos que podrían concentrarse en pacientes que realmente requieren
+atención presencial.
+
+### 1.2 Qué es SaludYa
+
+**SaludYa — Portal Web de Gestión Hospitalaria** es un sistema web que
+digitaliza esos trámites administrativos: permite a un paciente
+registrarse, iniciar sesión, y agendar, consultar y cancelar sus citas
+médicas en línea; y permite a un administrador del hospital gestionar
+médicos, especialidades y el flujo completo de citas desde un panel
+propio. El sistema aplica reglas reales de negocio de un hospital:
+horario de atención (7:00 a. m. a 5:00 p. m.), prohibición de citas
+los domingos, y la imposibilidad de que un mismo médico tenga dos
+citas activas a la misma fecha y hora.
+
+### 1.3 Módulos del sistema
+
+| Módulo | Funcionalidades |
+|---|---|
+| Público | Landing institucional, historia/misión/visión, listado de especialidades, listado de médicos, contacto, preguntas frecuentes. |
+| Paciente | Registro, inicio de sesión, edición de perfil, agendar cita (validando horario, día y disponibilidad del médico), consultar citas (pendientes e historial) y cancelarlas. |
+| Administrador | Dashboard con métricas en tiempo real, CRUD de médicos, CRUD de especialidades, gestión y cancelación de cualquier cita, administración de pacientes. |
+
+### 1.4 Stack tecnológico completo del proyecto
+
+| Capa | Tecnología |
+|---|---|
+| Frontend | React 18, Vite, TailwindCSS, Axios, React Router, Vitest, React Testing Library |
+| Backend | Python 3.11, FastAPI, SQLAlchemy 2, Pydantic v2, python-jose (JWT), passlib (bcrypt), Alembic, Pytest |
+| Base de datos | PostgreSQL 15, normalizada hasta 3FN |
+| DevOps | Docker, Docker Compose, Nginx (reverse proxy + SPA), Git, GitHub |
+
+Este documento se enfoca específicamente en el **frontend**; el
+backend y la contenerización con Docker se documentan, con el mismo
+nivel de detalle, en
+[`02-testing-backend-pytest.md`](02-testing-backend-pytest.md) y
+[`03-docker-compose.md`](03-docker-compose.md).
+
+## 2. ¿Qué es Vitest y qué papel cumple en este proyecto?
 
 **Vitest** es un **framework de pruebas automatizadas** para proyectos
 JavaScript/TypeScript, creado por el mismo equipo detrás de **Vite**
@@ -50,9 +103,9 @@ backend las espera.
 
 ---
 
-## 2. Entorno de trabajo y cómo se instaló
+## 3. Entorno de trabajo y cómo se instaló
 
-### 2.1 Dónde se desarrolló
+### 3.1 Dónde se desarrolló
 
 Todo el código del frontend (componentes, páginas, y las pruebas de
 este documento) se escribió en **Visual Studio Code**, en un entorno
@@ -73,7 +126,7 @@ Windows. El repositorio se versionó con **Git** y se subió a
 > Docker Desktop instalado, cosa que no estaba disponible en todos los
 > entornos usados durante el desarrollo.
 
-### 2.2 Qué se descargó y cómo se incluyó en el proyecto
+### 3.2 Qué se descargó y cómo se incluyó en el proyecto
 
 Vitest **no se instala por separado**: se declara como una dependencia
 de desarrollo dentro de [`frontend/package.json`](../../frontend/package.json)
@@ -132,7 +185,7 @@ tener que importarlas archivo por archivo.
 
 ---
 
-## 3. Dónde se está practicando este tema dentro del proyecto
+## 4. Dónde se está practicando este tema dentro del proyecto
 
 Las pruebas viven **junto al archivo que prueban**, con el sufijo
 `.test.js`/`.test.jsx` (convención de Vitest: las detecta
@@ -154,7 +207,7 @@ formularios, componentes, rutas, API Mock y validaciones.
 
 ---
 
-## 4. Cómo se ejecutan las pruebas (paso a paso)
+## 5. Cómo se ejecutan las pruebas (paso a paso)
 
 ```bash
 cd frontend
@@ -173,7 +226,7 @@ npm run build            # compila la app para producción; confirma que no hay 
 
 ---
 
-## 5. Evidencia real de la ejecución (salida obtenida)
+## 6. Evidencia real de la ejecución (salida obtenida)
 
 > Las salidas que siguen son la **transcripción textual real** de
 > haber ejecutado estos comandos contra el código actual del
@@ -183,7 +236,7 @@ npm run build            # compila la app para producción; confirma que no hay 
 
 [INSERTAR CAPTURA: terminal de VS Code ejecutando `npm test`, con el resultado en verde]
 
-### 5.1 Resultado de `npx vitest run --reporter=verbose`
+### 6.1 Resultado de `npx vitest run --reporter=verbose`
 
 ```
 ✓ src/utils/validadores.test.js > validarRegistro > no devuelve errores para un formulario válido
@@ -241,7 +294,7 @@ npm run build            # compila la app para producción; confirma que no hay 
 **Resumen:** ✅ **41 de 41 pruebas pasaron**, en los 6 archivos de
 prueba, sin ninguna omitida ni fallida.
 
-### 5.2 Resultado de `npm run build` (compilación de producción)
+### 6.2 Resultado de `npm run build` (compilación de producción)
 
 ```
 vite v5.4.21 building for production...
@@ -256,7 +309,7 @@ Confirma que, además de pasar las pruebas de comportamiento, el
 código **compila sin errores** para producción (sin imports rotos,
 sin JSX inválido).
 
-### 5.3 Resultado de `npm run lint` (calidad de código)
+### 6.3 Resultado de `npm run lint` (calidad de código)
 
 ```
 C:\general_proyectos\proyecto_ospital\frontend\src\context\AuthContext.jsx
@@ -276,7 +329,7 @@ aquí).
 
 ---
 
-## 6. Interpretación de resultados — cómo leer la salida
+## 7. Interpretación de resultados — cómo leer la salida
 
 | Símbolo / texto | Qué significa |
 |---|---|
@@ -289,7 +342,7 @@ aquí).
 
 ---
 
-## 7. Relación con el resto del proyecto
+## 8. Relación con el resto del proyecto
 
 Estas pruebas validan la capa de frontend **de forma aislada**, usando
 mocks para la API (`vi.mock("./client")` en `endpoints.test.js`, o
@@ -309,7 +362,7 @@ o levantando todo con Docker Compose (ver
 
 ---
 
-## 8. Conclusión
+## 9. Conclusión
 
 Vitest, junto con React Testing Library, cumple en este proyecto el
 papel de **red de seguridad automatizada** del frontend: cada vez que
@@ -320,7 +373,7 @@ pruebas exitosas, build limpio, 0 errores de lint) demuestra que, al
 momento de esta entrega, el frontend cumple con los cinco tipos de
 prueba exigidos y no tiene regresiones conocidas.
 
-## 9. Referencias
+## 10. Referencias
 
 - Documentación oficial de Vitest: <https://vitest.dev/>
 - Documentación oficial de React Testing Library: <https://testing-library.com/docs/react-testing-library/intro/>
