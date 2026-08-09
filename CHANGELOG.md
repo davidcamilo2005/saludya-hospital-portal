@@ -3,6 +3,22 @@
 Todos los cambios notables de este proyecto se documentan en este archivo.
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/).
 
+## [1.3.0] - 2026-08-08
+
+### Added
+
+- `docs/evidencias/04-bitacora-resolucion-problemas.md`: registro real
+  de una sesión de verificación con Docker en GitHub Codespaces, con
+  4 problemas encontrados y resueltos (documentados con síntoma,
+  diagnóstico y comandos exactos): caché de BuildKit corrupta al
+  construir las imágenes (`docker builder prune -af`), confusión de
+  terminal al no usar `cd` para entrar a una carpeta, `npm test`
+  fallando por no haber corrido `npm install` antes, y la respuesta
+  `{"detail": "Not Found"}` al visitar la ruta raíz del backend
+  (comportamiento esperado, no un error). Enlazada desde
+  `docs/GUIA_DE_PRUEBAS.md` (tabla de solución de problemas) y desde
+  el `README.md`.
+
 ## [1.2.0] - 2026-08-07
 
 ### Added

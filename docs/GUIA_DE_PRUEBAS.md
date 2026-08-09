@@ -421,8 +421,17 @@ demo:
 
 ## 12. Solución de problemas comunes
 
+> 📓 Ver también [`docs/evidencias/04-bitacora-resolucion-problemas.md`](evidencias/04-bitacora-resolucion-problemas.md):
+> el registro detallado, con capturas y explicación completa, de una
+> sesión real de verificación en GitHub Codespaces donde aparecieron
+> varios de los problemas de la tabla de abajo.
+
 | Síntoma                                                                 | Cómo confirmarlo                                                                            | Solución                                                                                                                                                               |
 | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `docker compose up --build` falla en "exporting to image" con `failed to prepare extraction snapshot ... parent snapshot ... not found` | El mensaje exacto de build de Docker | Caché de BuildKit corrupta (común en Codespaces con disco limitado). `docker builder prune -af` y volver a ejecutar `docker compose up --build` |
+| `bash: frontend/: Is a directory` al intentar entrar a una carpeta | Escribiste el nombre de la carpeta solo, sin `cd` delante | Usa `cd frontend` (con el comando `cd` primero) |
+| `npm test` falla con `sh: 1: vitest: not found` | No existe `frontend/node_modules/` todavía | Corre `npm install` dentro de `frontend/` antes de `npm test` |
+| El navegador muestra `{"detail": "Not Found"}` al abrir el puerto 8000 | Estás visitando la URL raíz (`/`) del backend | No es un error: el backend no define ruta en `/`. Visita `/docs` (Swagger) o `/health` en esa misma URL |
 | Un contenedor está en`Restarting` sin parar                           | `docker compose ps`                                                                        | `docker compose logs <servicio>` para ver el error exacto que causa el reinicio                                                                                       |
 | `docker compose up` falla con "port is already allocated"              | El mensaje lo dice explícitamente (puerto 5432, 8000 u 8080 ocupado)                        | Cierra el programa que use ese puerto, o cambia`POSTGRES_PORT`/`BACKEND_PORT`/`FRONTEND_PORT` en tu `.env`                                                      |
 | El frontend carga pero las páginas no traen datos                       | DevTools → pestaña Network, revisa el código de estado de las peticiones a`/api/v1/...` | Si da error de conexión: revisa que`backend` esté `(healthy)`. Si da `401`/`403`: normal si no iniciaste sesión con el rol correcto                          |

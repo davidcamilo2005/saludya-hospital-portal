@@ -260,6 +260,7 @@ saludya-hospital-portal/
 | [`docs/evidencias/01-testing-frontend-vitest.md`](docs/evidencias/01-testing-frontend-vitest.md) | Documento formal: qué es Vitest, cómo se usa, evidencia real de ejecución (41/41 pruebas) |
 | [`docs/evidencias/02-testing-backend-pytest.md`](docs/evidencias/02-testing-backend-pytest.md) | Documento formal: qué es Pytest, cómo se usa, evidencia real de ejecución (67/68 + cobertura 96%) |
 | [`docs/evidencias/03-docker-compose.md`](docs/evidencias/03-docker-compose.md) | Documento formal: qué son Docker/Docker Compose, cómo se usan, evidencia de ejecución del sistema completo |
+| [`docs/evidencias/04-bitacora-resolucion-problemas.md`](docs/evidencias/04-bitacora-resolucion-problemas.md) | Bitácora real de depuración en GitHub Codespaces: problemas encontrados, diagnóstico y solución, con comandos exactos |
 | [`docs/INFORME.md`](docs/INFORME.md)                           | Informe universitario completo (Fase 8)                    |
 | [`docs/fases/`](docs/fases/)                                   | Registro de las 8 fases de desarrollo, en orden            |
 
